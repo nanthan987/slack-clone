@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href= "{{ url_for('static', filename='index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script id="chat-window-template" type="text/x-handlebars-template">
+    	{% raw -%}
+    	<ul class="message-list {{ active }}" id="chat_{{ id }}">
+    		{{#each messages}}
+        	<li class="message {{ this.class }}">
+            	<p class="message-info"><span class="sent-time">{{ this.time }}</span><span class="message-sender">{{ this.sender_name }}</span></p>
+            	<p class="message-body">{{ this.text }}</p>   			
+        	</li>
+        	{{/each }}
+        </ul>
+        {%- endraw %}
+    </script>
+    <script id="message-template" type="text/x-handlebars-template">
+    	{% raw -%}
+    	<li class="message {{ message.class }}">
+            <p class="message-info"><span class="sent-time">{{ message.time }}</span><span class="message-sender">{{ message.sender_name }}</span></p>
+            <p class="message-body">{{ message.text }}</p>   			
+        </li>
+        {%- endraw %}
+    </script>
+    <script id="chat-template" type="text/x-handlebars-template">
+    	{% raw -%}
+    	{{#each chats }}
+    	<li class="dropdown-item-li chat" data-id = "{{ this.id }}">
+            <a href="">{{ this.name}}</a>
+        </li>
+        {{/each }}
+        {%- endraw %}
+    </script>
+    <script id="user-template" type="text/x-handlebars-template">
+    	{% raw -%}
+    	{{#each users }}
+    	<li class="dropdown-item-li user" data-id="{{ this.id }}">
+            <a href="">{{ this.name }}</a>
+        </li>
+        {{/each }}
+        {%- endraw %}
+    </script>
+    <script src="{{ url_for('static',filename='index.js') }}" ></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div class="auth {{ auth_display }}" data-authenticated='{{ authenticated }}' >
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm" id="display-name-form-container">
+                        <form id="display-name-form">
+                            <div class="form-group">
+                                <label for="display-name-input">Enter a display name</label>
+                                <input type="text" class="form-control" name="display-name" id="display-name-input" aria-describedby="emailHelp">
+                                <small id="emailHelp" class="form-text text-muted">This is the name others will see in your chats</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <main class="{{ main_display }}">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-2 vertical-navbar">
+                        <div>
+                            <header>
+                                <div id="logo-container">
+                                    <img id="logo" src="{{url_for('static',filename='media/logo2.png')}}">
+                                </div>
+                                <div id="display-name-container">
+                                    <h1 id="display-name"></h1>
+                                </div>
+                            </header>
+                            <nav>
+                                <div id="chats-list-container" class="dropdown-container">
+                                	<div class="dropdown-toggle-container"><button class="dropdown-toggle-btn"><i class="dropdown-icon"></i> Chats</button><button id="add-chat-btn"><i class="add-chat-icon"></i></button></div>
+                                	<ul id="chats-list" class="dropdown-content">
+                                	</ul>
+                                </div>
+                                <div id="user-list-container" class="dropdown-container">
+                                    <div class="dropdown-toggle-container"><button class="dropdown-toggle-btn"><i class="dropdown-icon"></i> Users</button></div>
+                                    
+                                    <ul id="users-list" class="dropdown-content">
+                                    </ul>
+                                </div>
+                                <button id="logout-btn"><a href="/logout">Logout</a></button>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-10 chat-window">
+                        <div id="messages-window"></div> 
+                        <div id="type-message-window" class="z-depth-5">
+                            <form id="type-message-form">
+                                <div id="message-input-container" class="form-group">
+                                    <textarea class="form-control" id="message-input" rows="3" placeholder="Type a message..."></textarea>
+                                </div>
+                                <div id="button-container">
+                                    <div id="secondary-container">
+                                        <button class="send-message-btn" type="submit" data-chat_id="">
+                                            <img src="{{url_for('static',filename='media/send-message.png')}}">
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+</body>
+
+</html>
+
+
