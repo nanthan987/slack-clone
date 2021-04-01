@@ -8,6 +8,9 @@ flask run
 
 ## Screenshots
 
+![App screenshot](https://github.com/nanthan987/slack-clone/blob/master/screenshots/screenshot0.png?raw=true)
+
+
 ![App screenshot](https://github.com/nanthan987/slack-clone/blob/master/screenshots/screenshot1.png?raw=true)
 
 
